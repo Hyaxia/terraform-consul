@@ -7,8 +7,9 @@ Steps to run:
 - run `eval $(minikube docker-env)`
   - lets minikube using the local docker daemon
   - detailed explanation - https://stackoverflow.com/questions/52310599/what-does-minikube-docker-env-mean
-- run `docker build --rm -t golang-docker-example ./test_app`
-  - now we can use the built image and minikube will be able to access it
+- now we can build the docker images and minikube will be able to access them
+  - run `docker build --rm -t golang-docker-example ./test_app`
+  - run `docker build --rm -t gateway ./gateway`
 - run `terraform init`
 - run `terraform apply`
 - - to check if we can access the golang webapp run `minikube tunnel` and try to access `http://127.0.0.1/`
@@ -18,3 +19,5 @@ Steps to run:
 TODO:
 
 - read article about using helm with kubernetes https://medium.com/@ayanendude/terraform-ing-application-on-kubernetes-cluster-7c3a7357c5dc
+- add nginx service that will route traffic to the golang webapp
+- change NodeIP to ClusterIP in webapp service
