@@ -19,5 +19,3 @@ Steps to run:
 TODO:
 
 - read article about using helm with kubernetes https://medium.com/@ayanendude/terraform-ing-application-on-kubernetes-cluster-7c3a7357c5dc
-- add nginx service that will route traffic to the golang webapp
-- change NodeIP to ClusterIP in webapp service
