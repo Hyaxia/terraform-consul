@@ -15,7 +15,7 @@ resource "kubernetes_deployment" "webapp" {
     }
   }
   spec {
-    replicas = 3
+    replicas = var.webapp_replicas
     selector {
       match_labels = {
         app = "webapp"
@@ -35,7 +35,7 @@ resource "kubernetes_deployment" "webapp" {
           liveness_probe {
             http_get {
               path = "/"
-              port = 8080
+              port = var.webapp_port
             }
             initial_delay_seconds = 15
             period_seconds        = 15
@@ -44,7 +44,7 @@ resource "kubernetes_deployment" "webapp" {
           readiness_probe {
             http_get {
               path = "/"
-              port = 8080
+              port = var.webapp_port
             }
             initial_delay_seconds = 3
             period_seconds        = 3
@@ -67,8 +67,8 @@ resource "kubernetes_service" "webapp" {
       app = kubernetes_deployment.webapp.metadata.0.labels.app
     }
     port {
-      port        = 8080
-      target_port = 8080
+      port        = var.webapp_port
+      target_port = var.webapp_port
       protocol    = "TCP"
     }
     type = "ClusterIP"
@@ -83,7 +83,7 @@ resource "kubernetes_deployment" "gateway" {
     }
   }
   spec {
-    replicas = 3
+    replicas = var.gateway_replicas
     selector {
       match_labels = {
         app = "gateway"
@@ -103,7 +103,7 @@ resource "kubernetes_deployment" "gateway" {
           liveness_probe {
             http_get {
               path = "/health"
-              port = 5000
+              port = var.gateway_port
             }
             initial_delay_seconds = 15
             period_seconds        = 15
@@ -112,7 +112,7 @@ resource "kubernetes_deployment" "gateway" {
           readiness_probe {
             http_get {
               path = "/health"
-              port = 5000
+              port = var.gateway_port
             }
             initial_delay_seconds = 3
             period_seconds        = 3
@@ -135,8 +135,8 @@ resource "kubernetes_service" "gateway" {
       app = kubernetes_deployment.gateway.metadata.0.labels.app
     }
     port {
-      port        = 5000
-      target_port = 5000
+      port        = var.gateway_port
+      target_port = var.gateway_port
       protocol    = "TCP"
     }
     type = "NodePort"
@@ -161,7 +161,7 @@ resource "kubernetes_ingress_v1" "main_ingress" {
             service {
               name = kubernetes_service.gateway.metadata.0.name
               port {
-                number = 5000
+                number = var.gateway_port
               }
             }
           }

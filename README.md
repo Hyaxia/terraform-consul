@@ -12,10 +12,11 @@ Steps to run:
   - run `docker build --rm -t gateway ./gateway`
 - run `terraform init`
 - run `terraform apply`
-- - to check if we can access the golang webapp run `minikube tunnel` and try to access `http://127.0.0.1/`
+- - to check if we can access the golang webapp run `minikube tunnel` and try to access `http://127.0.0.1/` and `http://127.0.0.1/webapp/test`
 
 ---
 
 TODO:
 
+- add postgres deployment and set the webapp to interact withit
 - read article about using helm with kubernetes https://medium.com/@ayanendude/terraform-ing-application-on-kubernetes-cluster-7c3a7357c5dc
