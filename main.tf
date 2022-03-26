@@ -1,9 +1,53 @@
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  config_path = var.kube_config_path
+}
+
+provider "helm" {
+  kubernetes {
+    config_path = var.kube_config_path
+  }
 }
 resource "kubernetes_namespace" "tfs" {
   metadata {
-    name = "tfs" # terraform-sandbox
+    name = "tfs"
+  }
+}
+
+resource "kubernetes_namespace" "consul" {
+  metadata {
+    name = "consul"
+  }
+}
+resource "helm_release" "consul" {
+  name       = "consul"
+  repository = "https://helm.releases.hashicorp.com"
+  chart      = "consul"
+  version    = "0.39.0"
+  namespace  = "consul"
+
+  set {
+    name  = "server.replicas"
+    value = 1
+  }
+  set {
+    name  = "connectInject.enabled"
+    value = true
+  }
+  set {
+    name  = "connectInject.default"
+    value = true
+  }
+  set {
+    name  = "controller.enabled"
+    value = true
+  }
+  set {
+    name  = "prometheus.enabled"
+    value = true
+  }
+  set {
+    name  = "ui.enabled"
+    value = true
   }
 }
 resource "kubernetes_deployment" "webapp" {
@@ -23,6 +67,9 @@ resource "kubernetes_deployment" "webapp" {
     }
     template {
       metadata {
+        annotations = {
+          "consul.hashicorp.com/connect-inject" = "true"
+        }
         labels = {
           app = "webapp"
         }
@@ -39,6 +86,10 @@ resource "kubernetes_deployment" "webapp" {
             }
             initial_delay_seconds = 15
             period_seconds        = 15
+          }
+          port {
+            container_port = var.webapp_port
+            name           = "http"
           }
 
           readiness_probe {
@@ -91,6 +142,10 @@ resource "kubernetes_deployment" "gateway" {
     }
     template {
       metadata {
+        annotations = {
+          "consul.hashicorp.com/connect-inject"            = "true"
+          "consul.hashicorp.com/connect-service-upstreams" = "webapp:8080"
+        }
         labels = {
           app = "gateway"
         }
@@ -100,6 +155,11 @@ resource "kubernetes_deployment" "gateway" {
           image             = "gateway"
           name              = "gateway"
           image_pull_policy = "Never" # this is set so that kuberenetes wont try to download the image but use the localy built one
+
+          port {
+            container_port = var.gateway_port
+            name           = "http"
+          }
           liveness_probe {
             http_get {
               path = "/health"

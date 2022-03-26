@@ -1,3 +1,8 @@
+variable "kube_config_path" {
+  description = "Kubernetes config path"
+  type        = string
+  default     = "~/.kube/config"
+}
 variable "webapp_port" {
   description = "Webapp - listerning port"
   type        = number

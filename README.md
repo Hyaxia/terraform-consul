@@ -4,6 +4,7 @@ Steps to run:
 - run `./init_env.sh`
 - run `terraform apply`
 - - to check if we can access the golang webapp run `minikube tunnel` and try to access `http://127.0.0.1/` and `http://127.0.0.1/webapp/test`
+- - to check the consul dashboard run `minikube service consul-consul-ui -n consul`
 
 ---
 
