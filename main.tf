@@ -51,6 +51,9 @@ resource "helm_release" "consul" {
   }
 }
 resource "kubernetes_deployment" "webapp" {
+  depends_on = [
+    helm_release.consul
+  ]
   metadata {
     name      = "webapp"
     namespace = "tfs"
@@ -115,7 +118,7 @@ resource "kubernetes_service" "webapp" {
   }
   spec {
     selector = {
-      app = kubernetes_deployment.webapp.metadata.0.labels.app
+      app = "webapp"
     }
     port {
       port        = var.webapp_port
@@ -126,6 +129,9 @@ resource "kubernetes_service" "webapp" {
   }
 }
 resource "kubernetes_deployment" "gateway" {
+  depends_on = [
+    helm_release.consul
+  ]
   metadata {
     name      = "gateway"
     namespace = "tfs"
@@ -192,7 +198,7 @@ resource "kubernetes_service" "gateway" {
   }
   spec {
     selector = {
-      app = kubernetes_deployment.gateway.metadata.0.labels.app
+      app = "gateway"
     }
     port {
       port        = var.gateway_port
