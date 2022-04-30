@@ -4,7 +4,8 @@
 minikube start
 
 # add the option to add an ingress to the minikube cluster
-minikube addons enable ingress
+# ** trying to work without it because consul provides an ingress of its own
+# minikube addons enable ingress
 
 # change docker envrinvoment variables to perform all of the actions on the minikube docker
 eval $(minikube docker-env)

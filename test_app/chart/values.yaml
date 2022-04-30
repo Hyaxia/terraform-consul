@@ -1,0 +1,18 @@
+# Default values for chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+nameOverride: backend
+replicaCount: 3
+image:
+  name: golang-docker-example
+  pullPolicy: Never
+application:
+  track: stable
+  tier: web
+service:
+  enabled: true
+  name: web
+  type: ClusterIP
+  externalPort: 8080
+  internalPort: 8080
+  url: http://google.com
