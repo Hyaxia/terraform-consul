@@ -9,13 +9,22 @@ Steps to run:
 
 ---
 
+Consul Getting Started Guide - https://learn.hashicorp.com/tutorials/consul/service-mesh-deploy?in=consul/gs-consul-service-mesh#overview
+
 TODO:
-- bring back the nginx ingress
 - activate prometheus
 - add circuit break logic using consul and envoy - https://learn.hashicorp.com/tutorials/consul/service-mesh-circuit-breaking?in=consul/service-mesh-traffic-management
 - add postgres deployment and set the backend to interact withit
 - read more about acl and intentions and how they work together to use them
+- bring back the nginx ingress - at the moment its not working, the ingress controller cant access the gateway containers
+    - when we run the command `minikube addons enable ingress` it creates a new namespace called `ingress-nginx` and the controller pods are there.
+    maybe all of the actions in the articles below should be on those pods.
+    - read https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/ about how ingress controllers work in general
+    - read https://www.consul.io/docs/k8s/connect/ingress-controllers on how to configure ingress controllers with consul on kubernetes
+    - someone has the same problem as me but he is not running in kubernetes, maybe i can use the same deployments as he did, idk - https://discuss.hashicorp.com/t/not-able-to-reach-to-a-consul-mesh-from-kubernetes-nginx-ingress/26343
 
 postgres kube terraform module
-
 - https://registry.terraform.io/modules/ballj/postgresql/kubernetes/latest
+
+minikube consul ingress problems
+- https://discuss.hashicorp.com/t/minikube-consul-ingress-gateway/29684
