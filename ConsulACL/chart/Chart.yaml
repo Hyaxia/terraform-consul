@@ -1,5 +1,5 @@
 apiVersion: v1
-description: helm package for deploying test_app
-name: test-app
+description: helm package for deploying Consul ACL's
+name: custom-acl
 version: 0.0.1
 icon: https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo-square.png

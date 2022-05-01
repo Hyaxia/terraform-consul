@@ -1,0 +1,10 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: {{ .Values.nameOverride }}
+spec:
+  destination:
+    name: '{{ .Values.destinationName }}'
+  sources:
+    - name: '{{ .Values.sourceName }}'
+      action: {{ .Values.action }}

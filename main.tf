@@ -89,6 +89,60 @@ resource "helm_release" "backend2" {
   }
 }
 
+resource "helm_release" "denyAllACL" {
+  depends_on = [
+    helm_release.consul
+  ]
+
+  name       = "deny-all"
+  chart      = "./ConsulACL/chart"
+  namespace  = "tfs"
+
+  set {
+    name  = "nameOverride"
+    value = "deny-all"
+  }
+  set {
+    name  = "destinationName"
+    value = "*"
+  }
+  set {
+    name  = "sourceName"
+    value = "*"
+  }
+  set {
+    name  = "action"
+    value = "deny"
+  }
+}
+
+resource "helm_release" "backendToBackend2" {
+  depends_on = [
+    helm_release.consul
+  ]
+
+  name       = "backend-to-backend2"
+  chart      = "./ConsulACL/chart"
+  namespace  = "tfs"
+
+  set {
+    name  = "nameOverride"
+    value = "backend-to-backend2"
+  }
+  set {
+    name  = "destinationName"
+    value = "backend2"
+  }
+  set {
+    name  = "sourceName"
+    value = "backend"
+  }
+  set {
+    name  = "action"
+    value = "allow"
+  }
+}
+
 # resource "kubernetes_deployment" "webapp" {
 #   depends_on = [
 #     helm_release.consul
