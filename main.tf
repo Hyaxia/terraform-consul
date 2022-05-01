@@ -95,7 +95,7 @@ resource "helm_release" "denyAllACL" {
   ]
 
   name       = "deny-all"
-  chart      = "./consul_acl/chart"
+  chart      = "./consul_intention/chart"
   namespace  = "tfs"
 
   set {
@@ -122,7 +122,7 @@ resource "helm_release" "backendToBackend2" {
   ]
 
   name       = "backend-to-backend2"
-  chart      = "./consul_acl/chart"
+  chart      = "./consul_intention/chart"
   namespace  = "tfs"
 
   set {
@@ -130,12 +130,12 @@ resource "helm_release" "backendToBackend2" {
     value = "backend-to-backend2"
   }
   set {
-    name  = "destinationName"
-    value = "backend2"
-  }
-  set {
     name  = "sourceName"
     value = "backend"
+  }
+  set {
+    name  = "destinationName"
+    value = "backend2"
   }
   set {
     name  = "action"
