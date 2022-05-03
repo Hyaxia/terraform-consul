@@ -18,6 +18,7 @@ resource "kubernetes_namespace" "consul" {
     name = "consul"
   }
 }
+
 resource "helm_release" "consul" {
   name       = "consul"
   repository = "https://helm.releases.hashicorp.com"
@@ -25,31 +26,67 @@ resource "helm_release" "consul" {
   version    = "0.39.0"
   namespace  = "consul"
 
+  # global
+  set {
+    name  = "global.metrics.enabled"
+    value = true
+  }
+
+  # server
   set {
     name  = "server.replicas"
     value = 1
   }
+
+  # controller
+  set {
+    name  = "controller.enabled"
+    value = true
+  }
+  
+  # connectInject
   set {
     name  = "connectInject.enabled"
     value = true
   }
   set {
     name  = "connectInject.default"
+    value = false
+  }
+  set {
+    name  = "connectInject.metrics.defaultEnabled"
     value = true
   }
   set {
-    name  = "controller.enabled"
+    name  = "connectInject.metrics.defaultEnableMerging"
     value = true
   }
-  set {
+
+  # prometheus
+  set { # this configuration is for deploying prometheus for non production use cases
     name  = "prometheus.enabled"
     value = true
   }
+
+  # ui
   set {
     name  = "ui.enabled"
     value = true
   }
+  set {
+    name  = "ui.metrics.enabled"
+    value = true
+  }
+  set {
+    name  = "ui.metrics.provider"
+    value = "prometheus"
+  }
+  set {
+    name  = "ui.metrics.baseUrl"
+    value = "http://prometheus-server"
+  }
 }
+
 resource "helm_release" "backend" {
   depends_on = [
     helm_release.consul
