@@ -180,6 +180,26 @@ resource "helm_release" "backendToBackend2" {
   }
 }
 
+resource "helm_release" "vitess-operator" {
+  # depends_on = [
+  #   helm_release.consul
+  # ]
+
+  name       = "vitess-operator"
+  chart      = "./vitess-operator"
+  namespace  = "tfs"
+}
+
+resource "helm_release" "vitess" {
+  depends_on = [
+    helm_release.vitess-operator
+  ]
+
+  name       = "vitess"
+  chart      = "./vitess/chart"
+  namespace  = "tfs"
+}
+
 # resource "kubernetes_deployment" "webapp" {
 #   depends_on = [
 #     helm_release.consul

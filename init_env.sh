@@ -3,8 +3,11 @@
 
 helm repo add hashicorp https://helm.releases.hashicorp.com
 
+# enable execution of pf.sh script
+chmod +x ./vitess/pf.sh
+
 # start minikube cluster
-minikube start
+minikube start --kubernetes-version=v1.23.3
 
 # add the option to add an ingress to the minikube cluster
 # minikube addons enable ingress
@@ -13,6 +16,7 @@ minikube start
 eval $(minikube docker-env)
 
 # build the needed images
+docker build --platform linux/amd64 --rm -t my-vitess-mysqld ./vitess
 docker build --rm -t golang-docker-example ./test_app
 docker build --rm -t gateway ./gateway
 

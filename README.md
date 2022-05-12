@@ -7,6 +7,7 @@ Steps to run:
     - to check the consul dashboard run `kubectl --namespace consul port-forward service/consul-consul-ui 18500:80 --address 0.0.0.0` and access `http://localhost:18500`
     - to check if the backend works run `kubectl port-forward service/backend -n tfs 8080:8080 --address 0.0.0.0` and access `http://localhost:8080` to see if it runs properly and `http://localhost:8080/friend/8081` to see if it can access backend2
     - to check if the prometheus server works run `kubectl --namespace consul port-forward service/prometheus-server 9090:80 --address 0.0.0.0` and access `http://localhost:9090`
+    - to check if vitess works, run `./vitess./pf.sh` and then `mysql -h 127.0.0.1 -P 15306 -u user` to connect to the mysql DB. then try to execute an SQL command and see if it works. as of writing this there is a problem with the vitess deployment probably because of the M1 chip. for further information check the notes below in the `information for later user` section.
 
 ---
 
@@ -37,7 +38,10 @@ More information for later use:
     - the deployment itself of prometheus is done by the consul chart ATM because it is the fastest way.
     to see how its done we can go to https://github.com/hashicorp/consul-k8s and into `charts/consul/templates/prometheus`.
     - the only problem that is left is that for some reason when prometheus tries to scrape metrics from the pods it receive `"INVALID" is not a valid start token`, ive opened an issue on stackoverflow, maybe the answer will come from there because I could not find any configuration that could fix that.
-- 
+- vitess:
+    - i've tried to perform the tutorial - https://vitess.io/docs/13.0/get-started/operator/
+    it did not work probably because im trying to run it on Mac with m1 chip.
+    I've openeed an issue on it to the vitess github project - https://github.com/vitessio/vitess/issues/10280
 
 
 
