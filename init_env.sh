@@ -7,7 +7,7 @@ helm repo add hashicorp https://helm.releases.hashicorp.com
 chmod +x ./vitess/pf.sh
 
 # start minikube cluster
-minikube start --kubernetes-version=v1.23.3
+minikube start --kubernetes-version=v1.19.16 --cpus=4 --memory=4000 --disk-size=32g
 
 # add the option to add an ingress to the minikube cluster
 # minikube addons enable ingress

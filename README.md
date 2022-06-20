@@ -44,4 +44,5 @@ More information for later use:
     I've openeed an issue on it to the vitess github project - https://github.com/vitessio/vitess/issues/10280
 
 
+* maybe I should just deploy it on amazon and I wont have to (hopefully) deal with all of the problems I have with my computer when deploying (like the vitess one)
 

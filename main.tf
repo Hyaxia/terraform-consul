@@ -186,7 +186,7 @@ resource "helm_release" "vitess-operator" {
   # ]
 
   name       = "vitess-operator"
-  chart      = "./vitess-operator"
+  chart      = "./vitess/vitess-operator"
   namespace  = "tfs"
 }
 
