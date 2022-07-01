@@ -16,12 +16,12 @@ var serverNum = rand.Int()
 
 func main() {
 	router := mux.NewRouter()
-	router.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/health", func(rw http.ResponseWriter, r *http.Request) {
 		response := map[string]string{
-			"message": "Welcome to Dockerized app",
+			"message": "healthy",
 		}
 		json.NewEncoder(rw).Encode(response)
-		fmt.Println(serverNum)
+		fmt.Println("received /health request")
 	})
 
 	router.HandleFunc("/friend/{port}", func(rw http.ResponseWriter, r *http.Request) {
@@ -30,7 +30,7 @@ func main() {
 
 		fmt.Println(fmt.Sprintf("server: %s, trying to access a friend at port %s", strconv.Itoa(serverNum), port))
 
-		resp, err := http.Get(fmt.Sprintf("http://localhost:%s/hi-friend", port))
+		resp, err := http.Get(fmt.Sprintf("http://localhost:%s/my-test/hi-friend", port))
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -59,7 +59,8 @@ func main() {
 		fmt.Println(fmt.Sprintf("success accessing friend at port %s", port))
 	})
 
-	router.HandleFunc("/{name}", func(rw http.ResponseWriter, r *http.Request) {
+	// TODO: try to remove this route and see if the metrics work, for some reason it receives the requests instead of the prometheus agent
+	router.HandleFunc("/my-test/{name}", func(rw http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		name := vars["name"]
 

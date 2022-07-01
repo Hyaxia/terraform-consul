@@ -7,7 +7,7 @@ ENV APP_NAME sample-dockerize-app
 ENV CMD_PATH main.go
 
 # Copy application data into image
-COPY . $GOPATH/src/$APP_NAME
+COPY ./src $GOPATH/src/$APP_NAME
 WORKDIR $GOPATH/src/$APP_NAME
 
 # Budild application
