@@ -14,6 +14,7 @@ Steps to run:
 Consul Getting Started Guide - https://learn.hashicorp.com/tutorials/consul/service-mesh-deploy?in=consul/gs-consul-service-mesh#overview
 
 TODO:
+- follow https://vitess.io/docs/13.0/user-guides/vschema-guide/sharded/ and get the sharding to work
 - add circuit break logic using consul and envoy - https://learn.hashicorp.com/tutorials/consul/service-mesh-circuit-breaking?in=consul/service-mesh-traffic-management
 - add postgres deployment and set the backend to interact withit
 - read more about acl and intentions and how they work together to use them
@@ -38,10 +39,6 @@ More information for later use:
     - the deployment itself of prometheus is done by the consul chart ATM because it is the fastest way.
     to see how its done we can go to https://github.com/hashicorp/consul-k8s and into `charts/consul/templates/prometheus`.
     - the only problem that is left is that for some reason when prometheus tries to scrape metrics from the pods it receive `"INVALID" is not a valid start token`, ive opened an issue on stackoverflow, maybe the answer will come from there because I could not find any configuration that could fix that.
-- vitess:
-    - i've tried to perform the tutorial - https://vitess.io/docs/13.0/get-started/operator/
-    it did not work probably because im trying to run it on Mac with m1 chip.
-    I've openeed an issue on it to the vitess github project - https://github.com/vitessio/vitess/issues/10280
 
 
 * maybe I should just deploy it on amazon and I wont have to (hopefully) deal with all of the problems I have with my computer when deploying (like the vitess one)
