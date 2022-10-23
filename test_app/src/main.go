@@ -59,7 +59,6 @@ func main() {
 		fmt.Println(fmt.Sprintf("success accessing friend at port %s", port))
 	})
 
-	// TODO: try to remove this route and see if the metrics work, for some reason it receives the requests instead of the prometheus agent
 	router.HandleFunc("/my-test/{name}", func(rw http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		name := vars["name"]
