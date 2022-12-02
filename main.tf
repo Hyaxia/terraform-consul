@@ -19,7 +19,26 @@ resource "kubernetes_namespace" "consul" {
   }
 }
 
+resource "helm_release" "pg-test" {
+  depends_on = [
+    kubernetes_namespace.tfs
+  ]
+
+  name      = "pg-test"
+  chart     = "bitnami/postgresql"
+  version   = "12.1.2"
+  namespace = "tfs"
+  set {
+    name  = "global.postgresql.auth.postgresPassword"
+    value = "postgres" # obviously this should be a secret and now just plain text
+  }
+}
+
 resource "helm_release" "consul" {
+  depends_on = [
+    kubernetes_namespace.consul
+  ]
+
   name       = "consul"
   repository = "https://helm.releases.hashicorp.com"
   chart      = "consul"
@@ -43,7 +62,7 @@ resource "helm_release" "consul" {
     name  = "controller.enabled"
     value = true
   }
-  
+
   # connectInject
   set {
     name  = "connectInject.enabled"
@@ -89,12 +108,13 @@ resource "helm_release" "consul" {
 
 resource "helm_release" "backend" {
   depends_on = [
-    helm_release.consul
+    helm_release.consul,
+    kubernetes_namespace.tfs
   ]
 
-  name       = "backend"
-  chart      = "./test_app/chart"
-  namespace  = "tfs"
+  name      = "backend"
+  chart     = "./test_app/chart"
+  namespace = "tfs"
 
   set {
     name  = "upstreamExists"
@@ -108,12 +128,13 @@ resource "helm_release" "backend" {
 
 resource "helm_release" "backend2" {
   depends_on = [
-    helm_release.consul
+    helm_release.consul,
+    kubernetes_namespace.tfs
   ]
 
-  name       = "backend2"
-  chart      = "./test_app/chart"
-  namespace  = "tfs"
+  name      = "backend2"
+  chart     = "./test_app/chart"
+  namespace = "tfs"
 
   set {
     name  = "nameOverride"
@@ -131,9 +152,9 @@ resource "helm_release" "denyAllACL" {
     helm_release.consul
   ]
 
-  name       = "deny-all"
-  chart      = "./consul_intention/chart"
-  namespace  = "tfs"
+  name      = "deny-all"
+  chart     = "./consul_intention/chart"
+  namespace = "consul"
 
   set {
     name  = "nameOverride"
@@ -158,9 +179,9 @@ resource "helm_release" "backendToBackend2" {
     helm_release.consul
   ]
 
-  name       = "backend-to-backend2"
-  chart      = "./consul_intention/chart"
-  namespace  = "tfs"
+  name      = "backend-to-backend2"
+  chart     = "./consul_intention/chart"
+  namespace = "consul"
 
   set {
     name  = "nameOverride"
